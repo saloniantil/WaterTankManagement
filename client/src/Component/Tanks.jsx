@@ -4,7 +4,7 @@ import Logout from "./Logout";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from 'axios';
-import Popup from "./PopUp";
+import Popup from "./Popup";
 
 const spreadsheetId = '1xUscMRU8Np8MveFGNF7j0kgc7tZY0VCjgbUS1OTIkRI';
 const apiKey = 'AIzaSyBBBwGfoiNv6kYngEe-TTPyzVxQmPc9afE';
