@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from 'axios';
 import Popup from "./Popup";
+import { base_url } from "../utils/constants";
 
 const spreadsheetId = '1xUscMRU8Np8MveFGNF7j0kgc7tZY0VCjgbUS1OTIkRI';
 const apiKey = 'AIzaSyBBBwGfoiNv6kYngEe-TTPyzVxQmPc9afE';
@@ -96,52 +97,6 @@ const Tanks = () => {
             setEspOnlineStatus([false, false, false]);
         }
     };
-
-    // const extractTankValues = (values) => {
-    //     let tankValues = [{ waterLevel: 0 }, { waterLevel: 0 }, { waterLevel: 0 }];
-    //     let latestTankTimestamp = [NaN, NaN, NaN];
-    //     let foundTank = [false, false, false];
-
-    //     if (!values.length) return { tankValues, latestTankTimestamp };
-
-    //     for (let row = values.length - 1; row >= 0; row--) {
-    //         const [lastDate, lastTime, tank1, tank2, tank3] = values[row];
-
-    //         if (!lastDate || !lastTime) continue;
-
-    //         const dateParts = lastDate.split("/");
-    //         if (dateParts.length === 3) {
-    //             const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-    //             const baseTimestamp = new Date(`${formattedDate}T${lastTime}`).getTime();
-
-    //              // Check each node separately
-    //             if (!isNaN(baseTimestamp)) {
-                    
-    //                 if (!foundTank[0] && tank1 !== undefined && tank1 !== '') {
-    //                     latestTankTimestamp[0] = baseTimestamp;
-    //                     tankValues[0] = { waterLevel: parseFloat(tank1) || 0 };
-    //                     foundTank[0] = true;
-    //                 }
-    //                 if (!foundTank[1] && tank2 !== undefined && tank2 !== '') {
-    //                     latestTankTimestamp[1] = baseTimestamp;
-    //                     tankValues[1] = { waterLevel: parseFloat(tank2) || 0 };
-    //                     foundTank[1] = true;
-    //                 }
-    //                 if (!foundTank[2] && tank3 !== undefined && tank3 !== '') {
-    //                     latestTankTimestamp[2] = baseTimestamp;
-    //                     tankValues[2] = { waterLevel: parseFloat(tank3) || 0 };
-    //                     foundTank[2] = true;
-    //                 }
-    //             }
-    //         }
-    //         // If all values are found, exit early
-    //         if (foundTank[0] && foundTank[1] && foundTank[2]) {
-    //             break;
-    //         }
-    //     }
-
-    //     return { tankValues, latestTankTimestamp };
-    // };
 
     const extractTankValues = (values) => {
         let tankValues = [{ waterLevel: 0 }, { waterLevel: 0 }, { waterLevel: 0 }];
@@ -276,7 +231,7 @@ const Tanks = () => {
 
             setPumpWarning(""); 
             
-            const lastRowResponse = await axios.get("http://localhost:3000/get-last-row");
+            const lastRowResponse = await axios.get(base_url + "/get-last-row");
             const lastRow = lastRowResponse.data.lastRow;
             
             const columnLetter = String.fromCharCode(67 + tankNumber - 1); 
@@ -288,7 +243,7 @@ const Tanks = () => {
                 values: [[newStatus]],
             };
             
-            const response = await axios.post("http://localhost:3000/update-tank-status", requestData);
+            const response = await axios.post(base_url + "/update-tank-status", requestData);
             
             if (response.data.success) {
 
@@ -326,7 +281,7 @@ const Tanks = () => {
 
             const newMotorStatus = motorStatus === "on" ? "off" : "on";
 
-            const lastRowResponse = await axios.get("http://localhost:3000/get-last-row");
+            const lastRowResponse = await axios.get(base_url +  "/get-last-row");
             const lastRow = lastRowResponse.data.lastRow;
             
             const motorColumn = "F";
@@ -337,7 +292,7 @@ const Tanks = () => {
                 values: [[newMotorStatus]]
             }
 
-            const response = await axios.post("http://localhost:3000/update-tank-status", requestData);
+            const response = await axios.post(base_url + "/update-tank-status", requestData);
 
             if (response.data.success) {
                 setMotorStatus(newMotorStatus);

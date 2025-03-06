@@ -2,12 +2,13 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { removeUser } from "../utils/Slices/userSlice";
 import axios from 'axios';
+import { base_url } from "../utils/constants";
 const Logout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const handleLogout = async() => {
         try {
-            const res = await axios.post("http://localhost:3000/logout",
+            const res = await axios.post(base_url +  "/logout",
                 {},
                 { withCredentials: true }
             );

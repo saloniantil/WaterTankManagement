@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
+import { base_url } from "../utils/constants";
 
 const EditOrViewOnly = () => {
     const navigate = useNavigate();
@@ -10,7 +11,7 @@ const EditOrViewOnly = () => {
 
     const checkAccess = async () => {
         try {
-            const res = await axios.get("http://localhost:3000/check-allTanks", { withCredentials: true })
+            const res = await axios.get(base_url + "/check-allTanks", { withCredentials: true })
             
             if (res.data.occupied) {
                 setMessage(res.data.message);
@@ -38,7 +39,7 @@ const EditOrViewOnly = () => {
         const isAvailable = await checkAccess();
         if (!isAvailable) return;
         try {
-            const res = await axios.post("http://localhost:3000/enter-allTanks", { emailId: userData.emailId }, 
+            const res = await axios.post(base_url + "/enter-allTanks", { emailId: userData.emailId }, 
             {withCredentials:true}
             )
 

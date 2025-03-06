@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { addUser } from '../utils/Slices/userSlice';
 import axios from 'axios';
+import { base_url } from '../utils/constants';
 const LoginPage = () => {
 
     const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const LoginPage = () => {
     const handleLogin = async () => {
         try {
             console.log("happy login")
-            const res = await axios.post("http://localhost:3000/login",
+            const res = await axios.post(base_url + "/login",
                 {
                     emailId,
                     password
