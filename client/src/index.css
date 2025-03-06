@@ -1,0 +1,342 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body {
+    background: linear-gradient(to right , #cfefff, #a0c4ff); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+h1 {
+    color: #01579b;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 2;
+}
+.login-page{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height:100vh;
+  width: 100vw;
+}
+.login-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
+    width: 350px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    position: relative;
+    z-index: 2;
+}
+.login-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.4);
+}
+h2 {
+    color: #0277bd;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    transition: 0.3s ease-in-out;
+    background: #f5f5f5;
+}
+input:focus {
+    border-color: #0288d1;
+    box-shadow: 0px 0px 10px rgba(2, 136, 209, 0.6);
+    background: white;
+}
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+    transition: color 0.3s ease-in-out;
+}
+.toggle-password:hover {
+    color: #0288d1;
+}
+.loginBtn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(to right, #0288d1, #01579b);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+}
+.loginBtn:hover {
+    background: linear-gradient(to right, #01579b, #0288d1);
+    box-shadow: 0px 5px 15px rgba(2, 119, 189, 0.5);
+    transform: scale(1.05);
+}
+
+/* Style for first title (PIET Heading) */
+.piet-heading {
+  color: #003366;
+  padding: 10px 20px;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.piet-heading img {
+  width: 50px;
+  height: auto;
+  margin-right: 15px;
+}
+
+
+/* Style for second title */
+.title {
+  text-align: center;
+  color: #333333;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* New Section for Tank Headings */
+.tank-headings {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.tank-heading {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #003366;
+  padding: 10px 20px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tank-heading:hover {
+  background-color: #ffcccc;
+  transform: scale(1.05);
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+  margin:4px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.card-content {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.reading-box {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  text-align: center;
+}
+
+.water-level-box {
+  width: 100%;
+  height: 300px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 20px;
+  border: 2px solid #ddd;
+  display: flex;
+}
+
+.water-level-container {
+  position: relative;
+  flex: 1;
+  height: 100%;
+}
+
+.water-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  transition: height 0.5s ease;
+}
+
+.low-water { background: #ff6666; }
+.medium-water { background: #ffcc00; }
+.high-water { background: #4caf50; }
+
+.tank-markings {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(9, 1fr);
+  grid-gap: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.marking {
+  width: 100%;
+  border-bottom: 1px dashed #999;
+  position: relative;
+}
+
+.marking-label {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.percentage-labels {
+  position: absolute;
+  top: 0;
+  right: -50px;
+  width: 30px;
+  text-align: right;
+  font-size: 0.75rem;
+  color: #555;
+  z-index: 3;
+}
+
+.percentage-labels span {
+  display: block;
+  margin-top: 30px;
+}
+
+/* New CSS for Motor Status Box */
+.motor-status-box {
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.motor-status {
+  font-size: 1.7rem;
+  color: #333;
+  font-weight: bolder;
+  background-color: #f2f2f2;
+  border: 3px solid #76c4e0;
+  border-radius: 15px;
+  padding: 6px 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  transition: transform 0.3s;
+  margin-bottom: 8px;
+}
+.onactive:active {
+  background-color:rgb(13, 154, 3);
+  color:white;
+}
+
+.motor-status span {
+  font-weight: bold;
+  color: #4caf50;
+}
+/* New styling for small headings inside each tank card */
+.tank-heading-small {
+  font-size: 1.9rem;
+  color: #003366;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.toggleButtonHook{
+ width: fit-content;
+ margin-left: 8px;
+ padding: 4px;
+ font-size: 12px;
+ color: #fff;
+ background-color: #007bff;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+}
+.toggleButtonHook:active{
+background-color:rgb(13, 154, 3);
+}
+
+
+.buttonClickViewEdit{
+  border: 1px solid rgb(185, 184, 184);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius:10px;
+  font-size: x-large;
+  font-weight:bold;
+  padding:10px 30px;
+  background-color: rgb(238, 238, 238);
+  cursor: pointer;
+}
+
+.buttonClickViewEdit:active{
+  transform: scale(0.8);
+}
+.buttonClickViewEdit:hover{
+  background-color: rgb(8, 99, 8);
+  color:white;
+  transition: 0.5s;
+  box-shadow: none;
+}
