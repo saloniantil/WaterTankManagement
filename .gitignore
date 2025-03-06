@@ -3,4 +3,4 @@ node_modules/
 client/node_modules/
 package-lock.json
 client/package-lock.json
-server/service-account.json
+server/config/service-account.json

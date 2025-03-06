@@ -19,15 +19,10 @@ app.use("/", authRouter);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename) || path.resolve();
 
-const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS || './server/service-account.json';
-const credentials = JSON.parse(fs.readFileSync(credentialsPath, "utf8"));
-if (!fs.existsSync(credentialsPath)) {
-    console.error('Missing service-account.json file.');
-    process.exit(1);
-  }
+const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+
 // Authenticate Google Sheets API
 const auth = new google.auth.GoogleAuth({
-    keyFile: "service-account.json", 
     credentials,
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
