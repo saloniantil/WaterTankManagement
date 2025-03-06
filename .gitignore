@@ -1,5 +1,4 @@
 .env
-server/service-account.json
 node_modules/
 client/node_modules/
 package-lock.json
