@@ -19,7 +19,14 @@ app.use("/", authRouter);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename) || path.resolve();
 
-const credentials = JSON.parse(fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS , "utf8" )) ;
+let credentials;
+
+if (process.env.GOOGLE_APPLICATION_CREDENTIALS.startsWith("{")) {
+    credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+} else {
+    credentials = JSON.parse(fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, "utf8"));
+}
+
 
 // Authenticate Google Sheets API
 const auth = new google.auth.GoogleAuth({
