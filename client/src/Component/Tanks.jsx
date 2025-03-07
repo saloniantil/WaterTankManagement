@@ -8,7 +8,7 @@ import Popup from "./Popup";
 import { base_url } from "../utils/constants";
 
 const spreadsheetId = '1xUscMRU8Np8MveFGNF7j0kgc7tZY0VCjgbUS1OTIkRI';
-const apiKey = 'AIzaSyBBBwGfoiNv6kYngEe-TTPyzVxQmPc9afE';
+const apiKey = import.meta.env.VITE_API_KEY;
 const tankRange = 'tank!A2:E';
 const statusRange = 'status!A2:F';
 
