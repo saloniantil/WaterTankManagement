@@ -19,7 +19,6 @@ const EditOrViewOnly = () => {
             } 
             return true;
         } catch (err) {
-            console.error(err.response.data.message);
             setMessage(err.response.data.message)
             return false;
         }
@@ -50,7 +49,6 @@ const EditOrViewOnly = () => {
                 setMessage(res.data.message || "Access denied.");
             }
         } catch (err) {
-            console.error(err.response.data.message);
             setMessage(`${userData.emailId} is already in edit mode`);
         }
     }

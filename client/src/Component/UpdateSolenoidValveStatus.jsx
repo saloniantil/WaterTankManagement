@@ -10,7 +10,6 @@ const updateSolenoidValveStatus = async (tankNumber, newStatus) => {
             }),
         });
         const data = await response.json();
-        console.log('API Response:', data);
         return data;
     } catch (error) {
         console.error('Error updating status:', error);

@@ -48,7 +48,6 @@ const Tanks = () => {
             const tankResponse = await axios.get(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${tankRange}?key=${apiKey}`);
             const tankData = tankResponse.data;
 
-            console.log(tankData.values)
             const statusResponse = await axios.get(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${statusRange}?key=${apiKey}&t=${Date.now()}`);
             const statusData = statusResponse.data;
             

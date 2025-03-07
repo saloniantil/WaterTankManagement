@@ -21,7 +21,6 @@ async function updateSheet(range, values) {
             valueInputOption: "USER_ENTERED",
             resource: { values: [values] },
         });
-        console.log("Update Successful", response.data);
     } catch (error) {
         console.error("Error updating sheet:", error);
     }

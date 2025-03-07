@@ -16,7 +16,6 @@ const LoginPage = () => {
     
     const handleLogin = async () => {
         try {
-            console.log("happy login")
             const res = await axios.post(base_url + "/login",
                 {
                     emailId,
@@ -28,7 +27,6 @@ const LoginPage = () => {
             return navigate("/edit-and-view-Or-View-Only")
         } catch (err) {
             setErrorMsg(err.response.data.message);
-            console.error("Error in LogIn " , err.message )
         }
     };
     

@@ -62,7 +62,6 @@ async function getLastRow(sheetName) {
         });
 
         const numRows = res.data.values ? res.data.values.length : 0;
-        console.log(`Last row in ${sheetName}:`, numRows);
         return numRows;
     } catch (error) {
         console.error("Error fetching last row:", error);
