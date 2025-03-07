@@ -7,7 +7,7 @@ import axios from 'axios';
 import Popup from "./Popup";
 import { base_url } from "../utils/constants";
 
-const spreadsheetId = '1xUscMRU8Np8MveFGNF7j0kgc7tZY0VCjgbUS1OTIkRI';
+const spreadsheetId = import.meta.env.VITE_SPREADSHEET_ID;
 const apiKey = import.meta.env.VITE_API_KEY;
 const tankRange = 'tank!A2:E';
 const statusRange = 'status!A2:F';
