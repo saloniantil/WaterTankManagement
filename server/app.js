@@ -12,14 +12,14 @@ import { fileURLToPath } from 'url';
 dotenv.config();
 const app = express();
 app.use(cookieParser());
-app.use(cors({ origin: ['http://localhost:5173' ,'https://watertankmanagement.onrender.com'], credentials: true }));
+app.use(cors({ origin: ['http://localhost:5174' ,'https://watertankmanagement.onrender.com'], credentials: true }));
 app.use(express.json());
 app.use("/", authRouter);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename) || path.resolve();
 
-const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+const credentials = JSON.parse(fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS , "utf8" )) ;
 
 // Authenticate Google Sheets API
 const auth = new google.auth.GoogleAuth({
