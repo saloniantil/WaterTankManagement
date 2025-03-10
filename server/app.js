@@ -12,7 +12,7 @@ import { fileURLToPath } from 'url';
 dotenv.config();
 const app = express();
 app.use(cookieParser());
-app.use(cors({ origin: ['http://localhost:5174' ,'https://watertankmanagement.onrender.com'], credentials: true }));
+app.use(cors({ origin: ['http://localhost:5173' ,'https://watertankmanagement.onrender.com'], credentials: true }));
 app.use(express.json());
 app.use("/", authRouter);
 

@@ -13,7 +13,8 @@ const EachTank = ({ tankNumber, waterLevel, solenoidValveStatus, onToggle, isNod
                 <div className="tank-heading-small">Tank { tankNumber }</div>
                 <div className="reading-box">
                     <p className="status">Water Level: <span>{ waterLevel }%</span></p>
-                    <p className="status">Solenoid Valve: <span style={{ color: 'rgb(0, 60, 255)' }}>{solenoidValveStatus}</span>
+                    <p className="status">Solenoid Valve:
+                        <span style={{ color: solenoidValveStatus === "on" ? "green" : "rgba(182,7,7,0.86)" }}>{solenoidValveStatus}</span>
                         {localStorage.getItem("editAccess") === "false" ? null : <ToggleBtn status={solenoidValveStatus} onToggle={() => onToggle(tankNumber)} />}
                     </p>
                     <p className="status">NodeMCU Status: <span style={{ color: 'rgb(0, 60, 255)' }}>{isNodeMcuOnline  ? "🟢 Online" : "🔴 Offline"}</span></p>

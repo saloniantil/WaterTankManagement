@@ -338,18 +338,18 @@ const Tanks = () => {
 
             <div className="motor-status-box">
                 <div className="motor-status">
-                    <p>Motor Status: <span style={{ color: 'rgb(0, 60, 255)' }}>{motorStatus.toUpperCase()}</span></p>
+                    <p>Motor Status: <span style={{color:motorStatus === "on" ? "rgb(15, 154, 15)" : "rgb(219, 30, 30)"}}>{motorStatus.toUpperCase()}</span></p>
                 </div>
                 {(localStorage.getItem("editAccess") === "false") ?
                     null
                     :
                     <button
-                    className="motor-status onactive"
-                    onClick={handleMotorToggle}
-                    
-                >
-                    {motorStatus === "on" ? "Turn OFF" : "Turn ON"}
-                </button>}
+                        className={`motor-status onactive`}
+                        style={{backgroundColor:motorStatus === "on" ? "rgb(219, 30, 30)" : "rgb(15, 154, 15)"}}
+                        onClick={handleMotorToggle}
+                    >
+                        {motorStatus === "on" ? "Turn OFF" : "Turn ON"}
+                    </button>}
                 {motorWarning && (
                     <p className="text-red-600 font-semibold mt-2 border border-gray-400 rounded-md py-1 px-3 bg-white">{motorWarning}</p>
                 )}

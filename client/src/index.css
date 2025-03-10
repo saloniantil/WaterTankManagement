@@ -340,3 +340,25 @@ background-color:rgb(13, 154, 3);
   transition: 0.5s;
   box-shadow: none;
 }
+
+.green-button {
+  background-color: rgb(15, 154, 15);
+  color: white;
+  cursor: pointer;
+  
+}
+
+.red-button {
+  background-color: rgb(219, 30, 30);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.green-text {
+  color: green;
+}
+
+.red-text {
+  color: red;
+}

@@ -3,7 +3,7 @@ import React from 'react';
 const ToggleButton = ({ status, onToggle }) => {
     
 return (
- <button className='toggleButtonHook' onClick={onToggle}>
+   <button className={` toggleButtonHook ${status === 'off' ? 'green-button' : 'red-button'}`} onClick={onToggle}>
     {status === 'on'? "Turn off" : "Turn on"}
  </button>
  );
