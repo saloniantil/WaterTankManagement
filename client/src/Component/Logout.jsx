@@ -13,7 +13,7 @@ const Logout = () => {
                 { withCredentials: true }
             );
             dispatch(removeUser());
-            navigate("/edit-and-view-Or-View-Only");
+            navigate("/");
         }catch(err){
             console.error(err);
         }

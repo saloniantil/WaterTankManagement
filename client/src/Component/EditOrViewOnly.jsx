@@ -3,11 +3,20 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 import { base_url } from "../utils/constants";
+import Logout from "./Logout";
 
 const EditOrViewOnly = () => {
     const navigate = useNavigate();
     const [message, setMessage] = useState("");
     const userData = useSelector((appStore) => appStore.user);
+
+    useEffect(() => {
+        
+        if (!userData) {
+            navigate("/");
+        }
+
+    }, [userData, navigate]);
 
     const checkAccess = async () => {
         try {
@@ -23,14 +32,6 @@ const EditOrViewOnly = () => {
             return false;
         }
     };
-
-    useEffect(() => {
-        
-        if (!userData) {
-            navigate("/");
-        }
-
-    }, [userData, navigate]);
     
     const handleViewAndEdit = async() => {
         if (!userData) return navigate("/edit-and-view-Or-View-Only");
@@ -70,6 +71,11 @@ const EditOrViewOnly = () => {
                 }
                 <div className="font-semibold text-3xl my-8">OR</div>
                 <div className="buttonClickViewEdit" onClick={handleViewOnly}>VIEW ONLY</div>
+
+                <div className="mt-10">
+                    <Logout />
+                </div>
+                
             </div>
         </div>
     )

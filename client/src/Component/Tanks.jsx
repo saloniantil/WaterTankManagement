@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import EachTank from "./EachTank";
-import Logout from "./Logout";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from 'axios';
 import Popup from "./Popup";
 import { base_url } from "../utils/constants";
+import ExitTanks from "./ExitTanks";
 
 const spreadsheetId = import.meta.env.VITE_SPREADSHEET_ID;
 const apiKey = import.meta.env.VITE_API_KEY;
@@ -61,6 +61,7 @@ const Tanks = () => {
 
              // Extract last row dynamically
             const lastRow = statusData.values[statusData.values.length - 1]; // Get latest row
+            
             const latestPumpStatus = lastRow[5] || "off"; 
             setMotorStatus(latestPumpStatus); // Update motor status
 
@@ -82,13 +83,86 @@ const Tanks = () => {
 
             const currentTime = Date.now();
 
-            const updatedTankOnlineStatus = latestTankTimestamp.map(timestamp => (currentTime - timestamp) <= 5000);
-            const updatedEspOnlineStatus = latestEspTimeStamp.map(timestamp => {
-                return !isNaN(timestamp) && (currentTime - timestamp) <= 5000;
+            const updatedEspOnlineStatus = latestEspTimeStamp.map((timestamp, index) => {
+                const isOnline = !isNaN(timestamp) && (Date.now() - timestamp) <= 5000;
+                console.log(`ESP${index + 1} is ${isOnline ? "Online" : "Offline"}`);
+                return isOnline;
+            });
+            
+
+          
+            setEspOnlineStatus(updatedEspOnlineStatus);
+
+            
+            // Extract latest timestamps for NodeMCU1, NodeMCU2, NodeMCU3
+            const latestTimes = { "NodeMCU1": null, "NodeMCU2": null, "NodeMCU3": null };
+
+            for (let i = tankData.values.length - 1; i >= 1; i--) { // Start from last row
+                let row = tankData.values[i];
+
+                if (!latestTimes.NodeMCU1 && row[1]) latestTimes.NodeMCU1 = row[0]; // Column B -> Time, Column C -> Data
+                if (!latestTimes.NodeMCU2 && row[2]) latestTimes.NodeMCU2 = row[0]; // Column D
+                if (!latestTimes.NodeMCU3 && row[3]) latestTimes.NodeMCU3 = row[0]; // Column E
+
+                if (latestTimes.NodeMCU1 && latestTimes.NodeMCU2 && latestTimes.NodeMCU3) break; // Stop once all are found
+            }
+
+            // Helper functions for time conversion
+            const parseTime = (timeValue) => {
+                if (!timeValue) return null;
+
+                if (typeof timeValue === "number") {
+                    return new Date(timeValue); // Convert timestamp
+                }
+
+                if (typeof timeValue === "string") {
+                    const parts = timeValue.split(":"); // Expected format HH:MM:SS
+                    if (parts.length === 3) {
+                        const now = new Date();
+                        return new Date(now.getFullYear(), now.getMonth(), now.getDate(),
+                        parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
+                    }
+                }
+
+                return null;
+            };
+
+            const convertToSeconds = (dateObj) => {
+                if (!dateObj) return 0;
+                return dateObj.getHours() * 3600 + dateObj.getMinutes() * 60 + dateObj.getSeconds();
+            };
+
+            const now = new Date();
+            const nowInSeconds = convertToSeconds(now);
+
+            
+            const getStatus = (lastTime) => {
+                const lastEntryTime = parseTime(lastTime);
+                const fetchedTimeInSeconds = lastEntryTime ? convertToSeconds(lastEntryTime) : 0;
+
+                if (!lastEntryTime) {
+                    return false;
+                }
+                const timeDifference = nowInSeconds - fetchedTimeInSeconds;
+                const isOnline = timeDifference <= 50; // Online if within 50 seconds, else Offline
+
+                console.log(`NodeMCU is ${isOnline ? "Online" : "Offline"} (Last Update: ${lastTime}, Time Diff: ${timeDifference} sec)`);
+
+                return isOnline;
+
+            };
+
+            const updatedTankOnlineStatus =[
+                getStatus(latestTimes.NodeMCU1),
+                getStatus(latestTimes.NodeMCU2),
+                getStatus(latestTimes.NodeMCU3)
+            ];
+
+            updatedTankOnlineStatus.forEach((status, index) => {
+                console.log(`NodeMCU${index + 1} is ${status ? "Online" : "Offline"}`);
             });
 
             setTankOnlineStatus(updatedTankOnlineStatus);
-            setEspOnlineStatus(updatedEspOnlineStatus);
 
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -97,6 +171,38 @@ const Tanks = () => {
         }
     };
 
+    // const extractTankValues = (jsonData) => {
+    //     let tankValues = [{ waterLevel: 0 }, { waterLevel: 0 }, { waterLevel: 0 }];
+    //     let latestTankTimestamp = [NaN, NaN, NaN];
+    
+    //     // Mapping NodeMCU keys to tank indexes
+    //     const nodeMapping = {
+    //         "NodeMCU1": 0,
+    //         "NodeMCU2": 1,
+    //         "NodeMCU3": 2
+    //     };
+    
+    //     Object.keys(jsonData).forEach((node) => {
+    //         const index = nodeMapping[node]; // Get tank index
+    //         const { status, fetchedTime, waterLevel } = jsonData[node];
+    
+    //         if (!fetchedTime) return; // Skip if no time is available
+    
+    //         // Generate timestamp from fetchedTime
+    //         const now = new Date();
+    //         const [hours, minutes, seconds] = fetchedTime.split(":").map(Number);
+    //         const timestamp = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, seconds).getTime();
+    
+    //         latestTankTimestamp[index] = timestamp;
+    //         tankValues[index] = {
+    //             waterLevel: parseFloat(waterLevel) || 0,
+    //             status
+    //         };
+    //     });
+    
+    //     return { tankValues, latestTankTimestamp };
+    // };
+    
     const extractTankValues = (values) => {
         let tankValues = [{ waterLevel: 0 }, { waterLevel: 0 }, { waterLevel: 0 }];
         let latestTankTimestamp = [NaN, NaN, NaN];
@@ -178,10 +284,6 @@ const Tanks = () => {
             }
         });
 
-        // const normalizedPumpStatus = pump?.toLowerCase().trim() === "on" 
-        // ? ["on", "on", "on"] 
-        // : ["off", "off", "off"];
-
         return { 
             espStatus: [
                 esp1?.toLowerCase() === "on" ? "on" : "off",
@@ -192,11 +294,6 @@ const Tanks = () => {
             latestEspTimeStamp 
         };
     };
-
-    // const getWaterLevelPercent = (sensorValue) => {
-    //     if (typeof sensorValue !== "number" || isNaN(sensorValue)) return 0;
-    //     return Math.round(((58 - sensorValue) / 40) * 100);
-    // };
 
     const getWaterLevelPercent = (sensorValue) => {
         if (typeof sensorValue !== "number" || isNaN(sensorValue)) return 0;
@@ -321,7 +418,7 @@ const Tanks = () => {
                 Panipat Institute of Engineering and Technology
             </h1>
             <h2 className="title md:text-5xl text-xl mb-10">Water Tank Monitoring & Control System</h2>
-            <Logout />
+            <ExitTanks />
             <Popup message={pumpWarning} onClose={closePopup} />
             <div className="flex flex-wrap justify-center items-center lg:space-x-4 lg:space-y-0 space-y-10">
                 {tankData.map((tank, index) => (
