@@ -288,6 +288,7 @@ input:focus {
 .onactive:active {
   background-color:rgb(13, 154, 3);
   color:white;
+  transform: scale(0.9);
 }
 
 .motor-status span {
@@ -347,12 +348,22 @@ background-color:rgb(13, 154, 3);
   cursor: pointer;
   
 }
+.green-button:active{
+  transform: scale(0.6);
+  transition: 0.5s ease-in-out;
+  background-color: rgb(1, 42, 1);
+}
 
 .red-button {
   background-color: rgb(219, 30, 30);
   color: white;
   border: none;
   cursor: pointer;
+}
+.red-button:active{
+  transform: scale(0.6);
+  transition: 0.5s ease-in-out;
+  background-color: rgb(52, 1, 1);
 }
 
 .green-text {
@@ -361,4 +372,21 @@ background-color:rgb(13, 154, 3);
 
 .red-text {
   color: red;
+}
+
+.exit_button{
+  background-color: rgba(96, 165, 250, 1);
+  padding:6px 14px;
+  color:white;
+  font-weight: bold;
+  border-radius: 4px;
+}
+.exit_button:hover{
+  background-color: rgb(71, 141, 227);
+}
+
+.exit_button:active{
+  transform: scale(0.9);
+  transition: 0.3s ease-in-out;
+
 }

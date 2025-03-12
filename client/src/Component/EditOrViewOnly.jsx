@@ -60,9 +60,14 @@ const EditOrViewOnly = () => {
         navigate("/allTanks");
         
     }
+
+    const handleProClick = () => {
+        console.log("clicked pro!")
+    }
     return (
-        <div className=" h-[100vh] w-[100vw] flex justify-center items-center">
-            <div>
+        <div className=" h-[100vh] w-[100vw] flex flex-col items-end">
+            <div className=" m-10 absolute border border-amber-500 shadow-sm shadow-amber-400 px-3 py-2 rounded-md cursor-pointer  font-semibold text-sm " onClick={handleProClick}>Try Pro</div>
+            <div className="h-full w-full flex flex-col justify-center items-center">
                 <div className="buttonClickViewEdit mb-2" onClick={handleViewAndEdit}>MANUAL</div>
                 {message &&
                     <div>

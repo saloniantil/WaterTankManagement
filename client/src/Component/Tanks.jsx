@@ -412,8 +412,8 @@ const Tanks = () => {
     }, [solenoidValveStatus], [tankData]);
 
     return (
-        <div>
-            <div className="flex justify-center items-center mt-8 "><img className="h-36" src="/logoPIET.jpg" alt="LOGO " /></div>
+        <div className="mb-10">
+            <div className="flex justify-center items-center mt-8"><img className="h-36" src="/logoPIET.jpg" alt="LOGO " /></div>
             <h1 className="piet-heading md:text-5xl text-2xl mt-2">
                 Panipat Institute of Engineering and Technology
             </h1>
@@ -442,7 +442,7 @@ const Tanks = () => {
                     :
                     <button
                         className={`motor-status onactive`}
-                        style={{backgroundColor:motorStatus === "on" ? "rgb(219, 30, 30)" : "rgb(15, 154, 15)"}}
+                        style={{backgroundColor:motorStatus === "on" ? "rgba(219, 30, 30, 0.8)" : "rgb(15, 154, 15)", color:"white"}}
                         onClick={handleMotorToggle}
                     >
                         {motorStatus === "on" ? "Turn OFF" : "Turn ON"}
@@ -450,11 +450,6 @@ const Tanks = () => {
                 {motorWarning && (
                     <p className="text-red-600 font-semibold mt-2 border border-gray-400 rounded-md py-1 px-3 bg-white">{motorWarning}</p>
                 )}
-            </div>
-
-            <div className="my-10">
-                <p>MADE BY TEAM AGRI-TECHIES</p>
-                <p>DESIGNED BY PRIYANSHU SHARMA</p>
             </div>
         </div>
     );
