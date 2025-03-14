@@ -20,8 +20,8 @@ const Logout = () => {
     };
 
     return (
-        <div className="mb-10">
-            <button onClick={handleLogout} className="bg-blue-400 px-4 py-2 rounded-md text-gray-100 hover:bg-opacity-80 font-semibold shadow-md shadow-blue-400 active:shadow-none">Logout</button>
+        <div>
+            <button onClick={handleLogout} className="bg-blue-400 px-4 py-2 rounded-md text-gray-100 hover:bg-opacity-80 font-semibold active:bg-blue-600">Logout</button>
         </div>
     );
 };

@@ -4,102 +4,35 @@ import { connectDB } from "./config/db.js";
 import authRouter from "./routes/auth.js";
 import cors from 'cors';
 import cookieParser from "cookie-parser";
-import { google } from "googleapis";
-import fs from "fs";
 import path from "path";
 import { fileURLToPath } from 'url';
+import { configureSheets } from "./config/sheets.js";
+import { createSheetService } from "./config/sheetService.js";
+import { createTankController } from "./controller/createTankController.js"
+import automateRouter from "./routes/automate.js";
 
 dotenv.config();
+
 const app = express();
+
+app.use(cors({ origin: ['http://localhost:5173', 'https://watertankmanagement.onrender.com'], credentials: true }));
+
 app.use(cookieParser());
-app.use(cors({ origin: ['http://localhost:5173' ,'https://watertankmanagement.onrender.com'], credentials: true }));
 app.use(express.json());
-app.use("/", authRouter);
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename) || path.resolve();
 
-let credentials;
-
-if (process.env.GOOGLE_APPLICATION_CREDENTIALS.startsWith("{")) {
-    credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
-} else {
-    credentials = JSON.parse(fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, "utf8"));
-}
+const sheets = configureSheets();
+const sheetService = createSheetService(sheets, process.env.SPREADSHEET_ID);
+const tankController = createTankController(sheetService);
 
 
-// Authenticate Google Sheets API
-const auth = new google.auth.GoogleAuth({
-    credentials,
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-});
+//Routes
+app.use("/", authRouter);
+app.use("/automate", automateRouter);
 
-
-const sheets = google.sheets({ version: "v4", auth });
-const spreadsheetId = process.env.SPREADSHEET_ID;
-
-async function updateSheet(range, values) {
-    try {
-        const formattedValues = values.flat(); 
-
-        await sheets.spreadsheets.values.update({
-            spreadsheetId,
-            range,
-            valueInputOption: "USER_ENTERED",
-            requestBody: { values: formattedValues },
-        });
-    } catch (error) {
-        console.error("Error updating Google Sheet:", error);
-        throw error;
-    }
-}
-
-async function getLastRow(sheetName) {
-    try {
-        const res = await sheets.spreadsheets.values.get({
-            spreadsheetId,
-            range: `${sheetName}!A:A`, // Fetch only column A to determine the last row
-        });
-
-        const numRows = res.data.values ? res.data.values.length : 0;
-        return numRows;
-    } catch (error) {
-        console.error("Error fetching last row:", error);
-        throw error;
-    }
-}
-
-app.get("/get-last-row", async (req, res) => {
-    try {
-        const resData = await sheets.spreadsheets.values.get({
-            spreadsheetId,
-            range: "status!A:A", // Get all values in column A (date/time)
-        });
-
-        const lastRow = resData.data.values ? resData.data.values.length : 0;
-        res.status(200).json({ success: true, lastRow });
-
-    } catch (error) {
-        console.error("Error fetching last row:", error);
-        res.status(500).json({ success: false, message: error.message });
-    }
-});
-
-app.post("/update-tank-status", async (req, res) => {
-
-    if (!req.body || !req.body.range || !req.body.values) {
-        return res.status(400).send({ success: false, message: "Missing required fields: range or values" });
-    }
-
-    try {
-
-        const { range, values } = req.body; 
-        await updateSheet(range, [values]);
-        res.status(200).send({ success: true, message: "Sheet updated successfully" });
-    } catch (error) {
-        res.status(500).send({ success: false, message: error.message });
-    }
-});
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 app.get("*", (_, res) => {

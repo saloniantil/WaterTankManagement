@@ -1,22 +1,53 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 import { base_url } from "../utils/constants";
 import Logout from "./Logout";
+import { setFree } from "../utils/Slices/freeTrialSlice";
 
 const EditOrViewOnly = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [message, setMessage] = useState("");
+    const [automate, setAutomate] = useState(false);
     const userData = useSelector((appStore) => appStore.user);
-
+    const freeBrowse = useSelector((state) => state.freeTrial.free);
+    
     useEffect(() => {
         
         if (!userData) {
             navigate("/");
+        } else {
+            startAutomation();
+            const interval = setInterval(checkAutomationStatus, 3000);
+            return () => clearInterval(interval);
         }
 
     }, [userData, navigate]);
+
+    const startAutomation = async() => {
+        try {
+            await axios.post(base_url + "/automate/start", {}, {
+                withCredentials: true
+            });
+            setAutomate("ON");
+            console.log("automation is running!")
+        } catch(error) {
+            setMessage("Failed to start automation!")
+        }
+    }
+
+    const checkAutomationStatus = async () => {
+        try {
+            const response = await axios.get(base_url + "/automate/status", {
+                withCredentials: true
+            });
+            setAutomate(response.data.data.isMonitoringActive ? "ON" : "OFF");
+        } catch (error) {
+            setAutomate("OFF");
+        }
+    };
 
     const checkAccess = async () => {
         try {
@@ -36,9 +67,23 @@ const EditOrViewOnly = () => {
     const handleViewAndEdit = async() => {
         if (!userData) return navigate("/edit-and-view-Or-View-Only");
         
+        try {
+            await axios.post(base_url + "/automate/stop", {}, {
+                withCredentials: true
+            });
+            setAutomate("OFF");
+            console.log("Automation turned off!")
+        } catch(error) {
+            setMessage("Failed to stop automation!");
+            return;
+        }
+
         const isAvailable = await checkAccess();
         if (!isAvailable) return;
         try {
+            if (!userData) return navigate("/edit-and-view-Or-View-Only");
+
+
             const res = await axios.post(base_url + "/enter-allTanks", { emailId: userData.emailId }, 
             {withCredentials:true}
             )
@@ -62,24 +107,39 @@ const EditOrViewOnly = () => {
     }
 
     const handleProClick = () => {
-        console.log("clicked pro!")
+        navigate("/subscription");
     }
+
+    const AutomationStatusIndicator = () => (
+        <div className="automation-status md:text-3xl text-lg">
+            <div className={`status-dot ${automate === "ON" ? "active" : ""}`}></div>
+            <span>System Running In Automation Mode</span>
+        </div>
+    );
     return (
         <div className=" h-[100vh] w-[100vw] flex flex-col items-end">
-            <div className=" m-10 absolute border border-amber-500 shadow-sm shadow-amber-400 px-3 py-2 rounded-md cursor-pointer  font-semibold text-sm " onClick={handleProClick}>Try Pro</div>
+            <div className=" m-10 absolute flex" onClick={handleProClick}>
+                
+                <div className="border border-amber-500 shadow-sm shadow-amber-400 px-3 py-2 rounded-md cursor-pointer  font-semibold text-sm active:bg-blue-400 active:text-white active:shadow-none mr-4">Try Pro</div>
+
+                <Logout />
+            </div>
+            
             <div className="h-full w-full flex flex-col justify-center items-center">
-                <div className="buttonClickViewEdit mb-2" onClick={handleViewAndEdit}>MANUAL</div>
-                {message &&
+                
+                {freeBrowse ? null : <AutomationStatusIndicator />}
+                
+                {freeBrowse ? null : <div className="buttonClickViewEdit mb-2" onClick={handleViewAndEdit}>MANUAL</div>}
+                
+                {message && !freeBrowse && 
                     <div>
                         <h2>{message}</h2> 
                     </div>
                 }
-                <div className="font-semibold text-3xl my-8">OR</div>
-                <div className="buttonClickViewEdit" onClick={handleViewOnly}>VIEW ONLY</div>
 
-                <div className="mt-10">
-                    <Logout />
-                </div>
+                {!freeBrowse && <div className="font-semibold text-3xl my-8">OR</div>}
+
+                <div className="buttonClickViewEdit" onClick={handleViewOnly}>VIEW ONLY</div>
                 
             </div>
         </div>

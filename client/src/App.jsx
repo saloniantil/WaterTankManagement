@@ -6,6 +6,8 @@ import Body from "./Component/Body";
 import EditOrViewOnly from "./Component/EditOrViewOnly";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "./utils/Slices/userSlice";
+import Premium from "./Component/Premium";
+import Automate from "./Component/Automate";
 
 const App = () => {
 
@@ -27,7 +29,9 @@ const App = () => {
           <Route path="/" element={<Body/>}>
             <Route path='/' element={<LoginPage />} />
             <Route path="/edit-and-view-Or-View-Only" element={user ? <EditOrViewOnly/> :<Navigate to="/" />} />
-            <Route path='/allTanks' element={ <Tanks/> } />
+            <Route path='/allTanks' element={<Tanks />} />
+            <Route path="/subscription" element={<Premium />} />
+            <Route path="/automate" element={<Automate/>} />
           </Route>
         </Routes>
       </BrowserRouter>

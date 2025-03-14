@@ -390,3 +390,20 @@ background-color:rgb(13, 154, 3);
   transition: 0.3s ease-in-out;
 
 }
+
+.automation-status {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  font-weight: bold;
+  color:rgb(7, 69, 7);
+  margin-bottom: 40px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  background-color: green;
+}
