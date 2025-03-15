@@ -15,6 +15,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 let activeUser = null;
+let activeUserEmail = null;
 
 authRouter.post("/login", async (req, res) => {
     try {
@@ -93,15 +94,27 @@ authRouter.post("/enter-allTanks", authenticateUser, checkActiveUser, async(req,
     if (!user) {
         return res.status(404).json({ message: "User not found." });
     }
-    if (activeUser) {
-        const activeUserData = await User.findById(activeUser).select("emailId");
+
+    if (activeUserEmail && activeUserEmail !== emailId) {
         return res.status(403).json({
-            occupied: true, message: `Another user is already in edit mode.`,
-            activeUser: activeUserData.emailId
-         });
+            occupied: true,
+            message: `Another user (${activeUserEmail}) is already in edit mode.`,
+            activeUser: activeUserEmail
+        });
     }
 
-    activeUser = req.userId;
+    // Allow the same user to enter from another device
+    activeUserEmail = emailId;
+
+    // if (activeUser) {
+    //     const activeUserData = await User.findById(activeUser).select("emailId");
+    //     return res.status(403).json({
+    //         occupied: true, message: `Another user is already in edit mode.`,
+    //         activeUser: activeUserData.emailId
+    //     });
+    // }
+
+    // activeUser = req.userId;
     return res.json({ success: true, message: "Access granted." , user: user ? user.emailId : "Unknown"});
 
 });
@@ -113,11 +126,11 @@ authRouter.post("/exit-allTanks", authenticateUser, async (req, res) => {
         return res.status(404).json({ message: "User not found." });
     }
 
-    if (activeUser === req.userId) {
-        const user = await User.findById(req.userId).select("emailId");
-        activeUser = null;
-        return res.status(200).json({ success: true, message: `${user.emailId} exited successfully.`   });
+     if (activeUserEmail === user.emailId) {
+        activeUserEmail = null;
+        return res.status(200).json({ success: true, message: `${user.emailId} exited successfully.` });
     }
+    
     return res.status(403).json({ message: `You are not the active user. Active user is ${user.emailId} `  });
 });
 

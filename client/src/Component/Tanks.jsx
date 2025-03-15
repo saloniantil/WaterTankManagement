@@ -85,7 +85,6 @@ const Tanks = () => {
 
             const updatedEspOnlineStatus = latestEspTimeStamp.map((timestamp, index) => {
                 const isOnline = !isNaN(timestamp) && (Date.now() - timestamp) <= 5000;
-                console.log(`ESP${index + 1} is ${isOnline ? "Online" : "Offline"}`);
                 return isOnline;
             });
             
@@ -146,8 +145,6 @@ const Tanks = () => {
                 const timeDifference = nowInSeconds - fetchedTimeInSeconds;
                 const isOnline = timeDifference <= 50; // Online if within 50 seconds, else Offline
 
-                console.log(`NodeMCU is ${isOnline ? "Online" : "Offline"} (Last Update: ${lastTime}, Time Diff: ${timeDifference} sec)`);
-
                 return isOnline;
 
             };
@@ -158,9 +155,6 @@ const Tanks = () => {
                 getStatus(latestTimes.NodeMCU3)
             ];
 
-            updatedTankOnlineStatus.forEach((status, index) => {
-                console.log(`NodeMCU${index + 1} is ${status ? "Online" : "Offline"}`);
-            });
 
             setTankOnlineStatus(updatedTankOnlineStatus);
 
