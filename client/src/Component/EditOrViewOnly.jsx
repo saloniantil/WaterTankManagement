@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 import { base_url } from "../utils/constants";
 import Logout from "./Logout";
-import { setFree } from "../utils/Slices/freeTrialSlice";
 
 const EditOrViewOnly = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const [message, setMessage] = useState("");
     const [automate, setAutomate] = useState(false);
     const userData = useSelector((appStore) => appStore.user);
@@ -35,6 +33,7 @@ const EditOrViewOnly = () => {
             console.log("automation is running!")
         } catch(error) {
             setMessage("Failed to start automation!")
+            console.error(error.message);
         }
     }
 
@@ -46,6 +45,7 @@ const EditOrViewOnly = () => {
             setAutomate(response.data.data.isMonitoringActive ? "ON" : "OFF");
         } catch (error) {
             setAutomate("OFF");
+            console.error(error.message);
         }
     };
 
@@ -75,6 +75,7 @@ const EditOrViewOnly = () => {
             console.log("Automation turned off!")
         } catch(error) {
             setMessage("Failed to stop automation!");
+            console.error(error.message);
             return;
         }
 
@@ -96,6 +97,7 @@ const EditOrViewOnly = () => {
             }
         } catch (err) {
             setMessage(`${userData.emailId} is already in edit mode`);
+            console.error(err.messge);
         }
     }
 

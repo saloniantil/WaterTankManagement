@@ -17,12 +17,24 @@ export const createSheetService = (sheets, spreadsheetId) => ({
       return response.data.values || [];
     },
   
-    appendStatus: async (values) => {
+    appendTank: async (values) => {
       return sheets.spreadsheets.values.append({
         spreadsheetId,
-        range: 'status!A:F',
+        range: 'tank!A:F',
         valueInputOption: 'USER_ENTERED',
+        insertDataOption: 'INSERT_ROWS',
         resource: { values: [values] },
       });
-    }
-  });
+    },
+    
+    appendStatus: async (values) => {
+    return sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: 'status!A:F',  // Store pump/valve status separately
+        valueInputOption: 'USER_ENTERED',
+        insertDataOption: 'INSERT_ROWS',
+        resource: { values: [values] },
+    });
+  }
+
+});
