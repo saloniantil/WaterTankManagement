@@ -20,7 +20,6 @@ app.use(cors({ origin: ['http://localhost:5173', 'https://watertankmanagement.on
 app.use(cookieParser());
 app.use(express.json());
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename) || path.resolve();
 
@@ -28,11 +27,20 @@ const sheets = configureSheets();
 const sheetService = createSheetService(sheets, process.env.SPREADSHEET_ID);
 const tankController = createTankController(sheetService);
 
+// Sample data for devices (You can replace this with your own data fetching logic)
+const devices = [
+    { id: 'ESP1', status: 'Online', waterLevel: '70%' },
+    { id: 'ESP2', status: 'Offline', waterLevel: 'N/A' },
+];
+
+// New Route to Serve Device Status Data
+app.get("/api/devices", (req, res) => {
+    res.json({ devices });
+});
 
 //Routes
 app.use("/", authRouter);
 app.use("/automate", automateRouter);
-
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 app.get("*", (_, res) => {
@@ -43,4 +51,3 @@ app.listen(3000, () => {
     connectDB();
     console.log("server started at http://localhost:3000");
 });
- 

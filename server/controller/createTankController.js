@@ -7,15 +7,21 @@ export const createTankController = (sheetService) => {
   };
 
   const logStatus = async () => {
-      const currentTime = new Date();
+    const currentTime = new Date();
+    const formatDate = (date) => {
+        return `'${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    };
+    const formatTime = (date) => {
+        return `'${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+    };
       const statusRow = [
-          currentTime.toISOString().split('T')[0], // Date
-          currentTime.toTimeString().split(' ')[0], // Time
-          state.valveStatus[1], 
-          state.valveStatus[2], 
-          state.valveStatus[3], 
-          state.pumpStatus
-      ];
+        formatDate(currentTime),
+        formatTime(currentTime), // Time
+        String(state.valveStatus[1]), 
+        String(state.valveStatus[2]), 
+        String(state.valveStatus[3]), 
+        String(state.pumpStatus)
+    ];
       try {
           await sheetService.appendStatus(statusRow);
       } catch (error) {
@@ -27,29 +33,17 @@ export const createTankController = (sheetService) => {
       if (action === 'on' && state.pumpStatus === 'off') {
           console.log('Turning pump ON');
           state.pumpStatus = 'on';
+          logStatus();
       } else if (action === 'off' && state.pumpStatus === 'on') {
           console.log('Turning pump OFF');
           state.pumpStatus = 'off';
+          logStatus();
       }
-  };
-
-  const formatDate = (date) => {
-    return `${date.getDate().toString().padStart(2, '0')}/${
-            (date.getMonth() + 1).toString().padStart(2, '0')}/${
-            date.getFullYear()}`;
     };
     
   const checkTankLevels = async () => {
       try {
-        const currentTime = new Date();
-        const formattedRow = [
-            formatDate(currentTime),
-            currentTime.toTimeString().split(' ')[0], // Time
-            state.previousLevels[1], // Node1 Distance
-            state.previousLevels[2], // Node2 Distance
-            state.previousLevels[3]  // Node3 Distance
-        ];
-      await sheetService.appendTank(formattedRow);
+          
           const ranges = ['tank!C2:C', 'tank!D2:D', 'tank!E2:E'];
           const responses = await Promise.all(
               ranges.map(range => sheetService.getSheetData(range))
@@ -92,7 +86,6 @@ export const createTankController = (sheetService) => {
                   }
                   logStatus();
                   setTimeout(() => controlPump("on"), 10000); // Delay before turning pump on
-                  logStatus();
               }
           }
 
@@ -108,7 +101,6 @@ export const createTankController = (sheetService) => {
 
               if (openValves.length === 0) {
                   controlPump("off");
-                  logStatus();
               } else if (openValves.length === 1) {
                   const lastTank = openValves[0];
                   if (percentages[lastTank] >= 95) {

@@ -16,16 +16,6 @@ export const createSheetService = (sheets, spreadsheetId) => ({
       });
       return response.data.values || [];
     },
-  
-    appendTank: async (values) => {
-      return sheets.spreadsheets.values.append({
-        spreadsheetId,
-        range: 'tank!A:F',
-        valueInputOption: 'USER_ENTERED',
-        insertDataOption: 'INSERT_ROWS',
-        resource: { values: [values] },
-      });
-    },
     
     appendStatus: async (values) => {
     return sheets.spreadsheets.values.append({

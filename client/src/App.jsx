@@ -8,6 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "./utils/Slices/userSlice";
 import Premium from "./Component/Premium";
 import Automate from "./Component/Automate";
+import Dashboard from "./Component/Dashboard";
+import './App.css';
+import DeviceStatus from "./Component/DeviceStatus";
+import './index.css';
 
 const App = () => {
 
@@ -32,6 +36,8 @@ const App = () => {
             <Route path='/allTanks' element={<Tanks />} />
             <Route path="/subscription" element={<Premium />} />
             <Route path="/automate" element={<Automate/>} />
+            <Route path="/dashboard" element={<Dashboard/>} />
+            <Route path="/devicestatus" element={<DeviceStatus/>} />
           </Route>
         </Routes>
       </BrowserRouter>

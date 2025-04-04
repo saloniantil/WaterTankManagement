@@ -1,7 +1,6 @@
 {
   "name": "watertankmanagement",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon server/app.js",
@@ -27,6 +26,8 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.9",
+    "tailwindcss": "^4.1.1",
     "vite": "^6.2.0"
-  }
+  },
+  "description": ""
 }
